@@ -1,6 +1,6 @@
 var app = angular.module('pokeApp', []);
 
-app.controller('PokemonController', function(PokeService){
+app.controller('PokemonController', ['PokeService', function(PokeService){
   console.log('PokemonController loaded');
 
 
@@ -27,11 +27,11 @@ ctrl.iChooseYou = function(pokemon){
 });
 };
 function togglePokemon(pokemon){
-  currentlySelectedPokemon.chosen = false; 
+  currentlySelectedPokemon.chosen = false;
   currentlySelectedPokemon = pokemon;
   pokemon.chosen = true;
 }
-});
+}]);
 // $http.get(API + '/pokemon'){
 //   params: {
 //     api_key: 'dc6zaTOxFJmzC',

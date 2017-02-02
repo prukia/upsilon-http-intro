@@ -1,7 +1,7 @@
 //app is our current angular app and service is the service
 //we will create
 //cut http, api from controller n copy to service
-app.service('PokeService',function ($http){
+app.service('PokeService',['$http', function ($http){
 var API = 'http://pokeapi.co/api/v2';
 
 this.getAllPokemon = function (){
@@ -25,4 +25,4 @@ return foundPokemon.sprites.front_default;//pokemon image
 })
 }
 
-});
+}]);
