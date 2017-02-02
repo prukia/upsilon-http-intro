@@ -1,31 +1,48 @@
-var app = angular.module('bookApp', []);
-//overloaded method does 2 different things based on
-//creating a new application based on the []
+var app = angular.module('pokeApp', []);
 
-//another way to link controller via a named function
-//giving a parm of $hhtp. in this case the actually name of the parm matters
-//do not need this method unless ur minifying ur code
-// app.controller(['http', BookController]);
-// function BookController($http){
-//
-// }
-app.controller('BookController', BookController);
-function BookController($http){
-//you can call it vm, ctrl, or name in html
-//this our link between the view and controller
+app.controller('PokemonController', function(PokeService){
+  console.log('PokemonController loaded');
+
+
   var ctrl = this;
+  var currentlySelectedPokemon = {};
+  ctrl.pokemonList = [{name: 'Squirtle'},
+                      {name:'Bulbasaur'},
+                      {name: 'Charmander'},
+                      {name: 'Pikachu'}];
 
-  ctrl.message = '';
 
-  $http({
-    method: 'GET',
-    url: '/books'
-  }).then(function(response){
-    console.log('Got a response from the server', response);
-    ctrl.message = response.data;
-    //instead of seperating using a , use .catch instead
-  }).catch (function(err){
-    console.log('Error requesting data from server', err);
-  })
-
+ctrl.currentPokemon = {};
+//calling function on the service which will return a promise
+//then we will have access to that array of pokemon
+PokeService.getAllPokemon().then(function (pokelist){
+  ctrl.pokemonList = pokelist;
+})
+ctrl.iChooseYou = function(pokemon){
+  console.log('Chose', pokemon);
+  PokeService.getPokemon(pokemon).then(function (imageUrl){
+    togglePokemon(pokemon);
+    ctrl.currentPokemon.imageUrl = imageUrl;
+    ctrl.currentPokemon.name = pokemon.name;
+});
+};
+function togglePokemon(pokemon){
+  currentlySelectedPokemon.chosen = false; 
+  currentlySelectedPokemon = pokemon;
+  pokemon.chosen = true;
 }
+});
+// $http.get(API + '/pokemon'){
+//   params: {
+//     api_key: 'dc6zaTOxFJmzC',
+//     q: 'search'
+//   }
+// }
+// $http({
+//   url:(API + '/pokemon')
+//   type: 'GET'
+//   params: {
+//     api_key: 'dc6zaTOxFJmzC',
+//     q: 'search'
+//   }
+// }
